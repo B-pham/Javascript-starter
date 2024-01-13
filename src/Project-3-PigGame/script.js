@@ -46,6 +46,10 @@ btnHold.addEventListener('click', function(){
 
 });
 
+btnNew.addEventListener('click', function(){
+
+});
+
 function getRandom(min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));
 }
