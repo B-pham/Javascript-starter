@@ -19,30 +19,42 @@ diceEl.classList.add('hidden');
 const scores = [0,0];
 let currScore = 0;
 let activePlayer = 0;
+let playing = true;
 
 btnRoll.addEventListener('click', function(){
-    
-    const dice = getRandom(1,6);
+    if(playing){
+        const dice = getRandom(1,6);
 
-    diceEl.classList.remove('hidden');
-    //console.log(dice);
-    diceEl.src = `PigGame/dice-${dice}.png`;
+        diceEl.classList.remove('hidden');
+        //console.log(dice);
+        diceEl.src = `PigGame/dice-${dice}.png`;
 
-    if(dice !== 1){
-        currScore += dice;
-        document.getElementById(`current--${activePlayer}`).textContent = currScore;
-    }else{
-        currScore = 0;
-        document.getElementById(`current--${activePlayer}`).textContent = currScore;
-
-        activePlayer = activePlayer === 0 ? 1 : 0;
-        player0El.classList.toggle('player--active');
-        player1El.classList.toggle('player--active');
+        if(dice !== 1){
+            currScore += dice;
+            document.getElementById(`current--${activePlayer}`).textContent = currScore;
+        }else{
+            changePlayer();
+            diceEl.classList.add('hidden');
+        }        
     }
-
 });
 
 btnHold.addEventListener('click', function(){
+    if(playing){
+        scores[activePlayer] += currScore;
+        document.getElementById(`score--${activePlayer}`).textContent = scores[activePlayer];
+
+
+        if(scores[activePlayer] >= 20){
+            document.querySelector(`.player--${activePlayer}`).classList.add('player--winner');
+            document.querySelector(`.player--${activePlayer}`).classList.remove('player--active');
+            playing = false;
+            diceEl.classList.add('hidden');
+        }else{
+            changePlayer();
+            diceEl.classList.add('hidden');
+        }        
+    }
 
 });
 
@@ -52,4 +64,12 @@ btnNew.addEventListener('click', function(){
 
 function getRandom(min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+function changePlayer(){
+        currScore = 0;
+        document.getElementById(`current--${activePlayer}`).textContent = currScore;        
+        activePlayer = activePlayer === 0 ? 1:0;
+        player0El.classList.toggle('player--active');
+        player1El.classList.toggle('player--active');    
 }
